@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__FILE__).'../../controllers/operations/userOperations.php';
+require_once dirname(__FILE__).'/../../controllers/db/operations/userOperations.php';
 
 function isParameterAvailable($params)
 {
@@ -9,16 +9,16 @@ function isParameterAvailable($params)
 	foreach ($params as $param) {
 		if (!isset($_POST[$param]) || strlen($_POST[$param])<=0) {
 			$available = false;
-			$missing_params = missing_params.", ".$param;
+			$missing_params = $missing_params.", ".$param;
 		} else {}
 	}
 
 	if (!$available) {
 		$response = array();
 		$response['error'] = true;
-		$response['message'] = 'Parameters '.substr($missing_params, 1, strlen($missingparams)).' missing.';
+		$response['message'] = 'Parameters '.substr($missing_params, 1, strlen($missing_params)).' missing.';
 
-		echo json_decode($response);
+		echo json_encode($response);
 		die();
 	}
 }
@@ -28,7 +28,7 @@ $response = array();
 if (isset($_GET['api_call'])) {
 	switch ($_GET['api_call']) {
 		case 'signup':
-			isParameterAvailable(array('user_fname', 'user_lname', 'email_address', 'telephone'));
+			isParameterAvailable(array('user_fname', 'user_lname', 'email_address', 'telephone', 'password'));
 
 			$dbOps = new UserOperator();
 
@@ -36,7 +36,8 @@ if (isset($_GET['api_call'])) {
 				$_POST['user_fname'],
 				$_POST['user_lname'],
 				$_POST['email_address'],
-				$_POST['telephone']
+				$_POST['telephone'],
+				$_POST['password']
 			);
 
 			if ($result) {
@@ -68,16 +69,15 @@ if (isset($_GET['api_call'])) {
 
 			break;
 
+// No managing function yet.
 		case 'signin':
-			isParameterAvailable(array('user_fname', 'user_lname', 'email_address', 'telephone'));
+			isParameterAvailable(array('email_address', 'password'));
 
 			$dbOps = new UserOperator();
 
 			$result = $dbOps->userAccess(
-				$_POST['user_fname'],
-				$_POST['user_lname'],
 				$_POST['email_address'],
-				$_POST['telephone']
+				$_POST['password']
 			);
 
 			if ($result) {
@@ -92,7 +92,7 @@ if (isset($_GET['api_call'])) {
 			break;
 
 		case 'updateuserdetails':
-			isParameterAvailable(array('user_id', 'user_fname', 'user_lname', 'email_address', 'telephone'));
+			isParameterAvailable(array('user_id', 'user_fname', 'user_lname', 'email_address', 'telephone', 'password'));
 
 			$dbOps = new UserOperator();
 
@@ -101,7 +101,8 @@ if (isset($_GET['api_call'])) {
 				$_POST['user_fname'],
 				$_POST['user_lname'],
 				$_POST['email_address'],
-				$_POST['telephone']
+				$_POST['telephone'],
+				$_POST['password']
 			);
 
 			if ($result) {
@@ -134,16 +135,16 @@ if (isset($_GET['api_call'])) {
 			break;
 
 		case 'showusers':
-			isParameterAvailable(array('user_id', 'user_fname', 'user_lname', 'email_address', 'telephone'));
+			// isParameterAvailable(array('user_id', 'user_fname', 'user_lname', 'email_address', 'telephone'));
 
 			$dbOps = new UserOperator();
 
 			$result = $dbOps->showUsers(
-				$_POST['user_id'],
-				$_POST['user_fname'],
-				$_POST['user_lname'],
-				$_POST['email_address'],
-				$_POST['telephone']
+				// $_POST['user_id'],
+				// $_POST['user_fname'],
+				// $_POST['user_lname'],
+				// $_POST['email_address'],
+				// $_POST['telephone']
 			);
 
 			if ($result) {

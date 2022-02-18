@@ -6,16 +6,13 @@ class PaymentsOperator
 {
 	private $con;
 	
-	function __construct(argument)
+	function __construct()
 	{
-		require_once dirname(__FILE__).'../connector/Connect.php';
+		require_once dirname(__FILE__).'/../connector/Connect.php';
 		$db = new Connector();
 		$this->con = $db.connect();
 	}
 
-	/**
-	 *FUNCTIONS TO PERFORM CRUD OPERATIONS ON THE  PAYMENTS TABLE. 
-	 */
 	function makePayment($user_id, $car_plate, $amount, $bar_code, $qr_code, $date_payed, $duration, $validity)
 	{
 		$statement = $this->con->prepare("INSERT INTO payments (user_id, car_plate, amount, bar_code, qr_code, date_payed, duration, validity) VALUES ($user_id, $car_plate, $amount, $bar_code, $qr_code, $date_payed, $duration, $validity)");
@@ -28,8 +25,8 @@ class PaymentsOperator
 			return false;
 			$statement->close();
 		}
-		
 	}
+
 	function showPaymentById($payment_id)
 	{
 		$statement->con->prepare("SELECT payment_id, user_id, car_plate, amount, bar_code, qr_code, date_payed, duration, validity FROM payments WHERE payment_id='$payment_id'");
@@ -58,6 +55,7 @@ class PaymentsOperator
 			$statement->close();
 		}
 	}
+	
 	function showPayments()
 	{
 		$statement->con->prepare("SELECT payment_id, user_id, car_plate, amount, bar_code, qr_code, date_payed, duration, validity FROM payments DESC LIMIT 5");

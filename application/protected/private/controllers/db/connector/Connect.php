@@ -10,7 +10,7 @@ class Connector
 
 	function connect()
 	{
-		require_once dirname(__FILE__).'../constats/Consts.php';
+		require_once dirname(__FILE__).'/../constants/Consts.php';
 
 		$this->con = new mysqli(HOST_SERVER, USER_NAME, USER_PASS, DB_NAME);
 

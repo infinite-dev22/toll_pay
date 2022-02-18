@@ -6,16 +6,16 @@ class UserOperator
 {
 	private $con;
 	
-	function __construct(argument)
+	function __construct()
 	{
-		require_once dirname(__FILE__).'../connector/Connect.php';
+		require_once dirname(__FILE__).'/../connector/Connect.php';
 		$db = new Connector();
-		$this->con = $db.connect();
+		$this->con = $db->connect();
 	}
 
-	function addUser($user_fname, $user_lname, $email_address, $telephone)
+	function addUser($user_fname, $user_lname, $email_address, $telephone, $password)
 	{
-		$statement = $this->con->prepare("INSERT INTO users(user_fname, user_lname, email_address, telephone) VALUES ($user_fname, $user_lname, $email_address, $telephone)");
+		$statement = $this->con->prepare("INSERT INTO users(user_fname, user_lname, email_address, telephone, password) VALUES ($user_fname, $user_lname, $email_address, $telephone, $password)");
 
 		if ($statement->execute()) {
 			return true;
@@ -40,8 +40,9 @@ class UserOperator
 				$details['user_lname']=$user_lname;
 				$details['email_address']=$email_address;
 				$details['telephone']=$telephone;
+
+				array_push($user, $details);
 			}
-			array_push($user, $details);
 
 			return $user;
 			$statement->close();
@@ -50,9 +51,9 @@ class UserOperator
 			$statement->close();
 		}
 	}
-	function updateUser($user_id, $user_fname, $user_lname, $email_address, $telephone)
+	function updateUser($user_id, $user_fname, $user_lname, $email_address, $telephone, $password)
 	{
-		$statement = $this->con->prepare(UPDATE users SET user_id='$user_id', user_fname='$user_fname', user_lname='$user_lname', email_address='$email_address', telephone='$telephone' WHERE user_id='$user_id');
+		$statement = $this->con->prepare("UPDATE users SET user_id='$user_id', user_fname='$user_fname', user_lname='$user_lname', email_address='$email_address', telephone='$telephone', password='$password' WHERE user_id='$user_id'");
 		
 		if ($statement->execute()) {
 			return true;
@@ -90,8 +91,9 @@ class UserOperator
 				$user['user_lname']=$user_lname;
 				$user['email_address']=$email_address;
 				$user['telephone']=$telephone;
+
+				array_push($users, $user);
 			}
-			array_push($users, $user);
 			return $users;
 			$statement->close();
 		} else {
